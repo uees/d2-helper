@@ -10,7 +10,7 @@ from logger import logger
 class SkillsHotkey:
     def register_hotkeys(self):
         for index, skill in enumerate(SKILLS):
-            keyboard.add_hotkey(str(index), self.handle, args=(skill, index))
+            keyboard.add_hotkey(str(index), self.handle, args=(skill, str(index)))
             logger.info(f"Hotkey `{index}` was successfully registered.")
 
     @staticmethod
@@ -19,12 +19,14 @@ class SkillsHotkey:
         实现按键之后的功能
         :return:
         """
+        if state.binding_right != index and state.binding_left != index:
+            time.sleep(.01)
+
         if skill["bind"] == mouse.LEFT:
             state.binding_left = index
         else:
             state.binding_right = index
 
-        time.sleep(.01)
         mouse.click(skill["bind"])
 
         logger.info(f"释放了技能: {skill['name']}")
